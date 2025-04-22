@@ -13,8 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<ContextMongoDb>(builder.Configuration.GetSection("MongoDB"));
-builder.Services.AddTransient<IGame, GamesRepository>();
 builder.Services.AddScoped<ContextMongoDb>();
+builder.Services.AddTransient<IGame, GamesRepository>();
 builder.Services.AddTransient<IGameCase, GameUseCase>();
 
 var app = builder.Build();
