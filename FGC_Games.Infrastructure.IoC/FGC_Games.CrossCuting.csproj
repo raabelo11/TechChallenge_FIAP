@@ -7,17 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="Repository\EntityFrameworkRepository\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.4" />
-    <PackageReference Include="MongoDB.Driver" Version="3.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\FGC_GamesApplication\FGC_Games.Application.csproj" />
     <ProjectReference Include="..\FGC_GamesDomain\FGC_Games.Domain.csproj" />
+    <ProjectReference Include="..\FGC_GamesInfrastructure\FGC_Games.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace FGC_Games.Domain.Models
 {
-    public class Jogo
+    public class User
     {
-        
+        public string Name {  get; set; }
+        public string Email {  get; set; }
+        public string Password { get; set; }
     }
 }
