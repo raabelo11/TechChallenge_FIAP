@@ -7,10 +7,10 @@ using MongoDB.Driver;
 
 namespace FGC_Games.Infrastructure.Repository.MongoDbRepository
 {
-    public class GamesRepository : IGame
+    public class RepositoryMongo : IGame
     {
         private readonly ContextMongoDb _context;
-        public GamesRepository(ContextMongoDb contextMongoDb)
+        public RepositoryMongo(ContextMongoDb contextMongoDb)
         {
             _context = contextMongoDb;
 
