@@ -1,4 +1,6 @@
 ﻿using FGC_Games.Domain.Models;
+using FGC_Games.Infrastructure.Configurations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -6,17 +8,20 @@ namespace FGC_Games.Infrastructure.Context
 {
     public class ContextMongoDb
     {
-        public string ConnectionURI { get; set; } = null!;
-        public string CollectionName { get; set; } = null!;
-        public string DatabaseName { get; set; } = null!;
+        private readonly IMongoDatabase _database;
 
-        public IMongoCollection<Game> gamesCollection;
-
-        public ContextMongoDb(IOptions<ContextMongoDb> mongoSettings)
+        public ContextMongoDb(IOptions<MongoDbSettings> options)
         {
-            MongoClient client = new MongoClient(mongoSettings.Value.ConnectionURI);
-            IMongoDatabase mongoDatabase = client.GetDatabase(mongoSettings.Value.DatabaseName);
-            gamesCollection = mongoDatabase.GetCollection<Game>(mongoSettings.Value.CollectionName);
+            var client = new MongoClient(options.Value.ConnectionString);
+            _database = client.GetDatabase(options.Value.DatabaseName);
+        }
+
+        public IMongoCollection<Game> gamesCollection
+        {
+            get
+            {
+                return _database.GetCollection<Game>("games");
+            }
         }
     }
 }

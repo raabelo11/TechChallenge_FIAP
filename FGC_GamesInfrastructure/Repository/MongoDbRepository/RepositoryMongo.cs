@@ -7,12 +7,12 @@ using MongoDB.Driver;
 
 namespace FGC_Games.Infrastructure.Repository.MongoDbRepository
 {
-    public class RepositoryMongo : IGame
+    public class RepositoryMongo<T> where T : class
     {
-        private readonly ContextMongoDb _context;
+        private readonly IMongoCollection<T> _games;
         public RepositoryMongo(ContextMongoDb contextMongoDb)
         {
-            _context = contextMongoDb;
+            _games = contextMongoDb.gamesCollection;
 
         }
         public Task<Game> CreateGamesAsync(Game games)
@@ -27,7 +27,7 @@ namespace FGC_Games.Infrastructure.Repository.MongoDbRepository
 
         public async Task<List<Game>> GetGames()
         {
-            return await _context.gamesCollection.Find(new BsonDocument()).ToListAsync();
+            return await _games.FindAsync(new BsonDocument()).Result.ToListAsync();
         }
 
         public Task<Game> GetGamesByIdAsync(int id)
