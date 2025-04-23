@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FGC_Games.Domain.Interface
 {
-    public interface IGame
+    public interface IMongoRepository
     {
         Task<List<Game>> GetGames();
         Task<Game> GetGamesByIdAsync(int id);

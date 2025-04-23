@@ -11,8 +11,8 @@ namespace FGC_Games.Application.UseCase
 {
     public class GameUseCase : IGameCase
     {
-        private readonly IGame _game;
-        public GameUseCase(IGame game)
+        private readonly IMongoRepository _game;
+        public GameUseCase(IMongoRepository game)
         {
             _game = game;
         }
