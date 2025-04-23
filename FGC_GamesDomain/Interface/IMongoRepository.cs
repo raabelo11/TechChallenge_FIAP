@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace FGC_Games.Domain.Interface
 {
-    public interface IMongoRepository
+    public interface IMongoRepository <T> where T : class
     {
-        Task<List<Game>> GetGames();
-        Task<Game> GetGamesByIdAsync(int id);
-        Task<Game> CreateGamesAsync(Game games);
-        Task<Game> UpdateGamesAsync(int id);
-        Task<Game> DeleteGameAsync(int id);
+        Task<List<T>> Get();
+        Task<T> GetById(int id);
+        Task<T> CreateAsync(T Entity);
+        Task<T> UpdateAsync(int id, T Entity);
+        Task<T> DeleteAsync(int id);
 
     }
 }

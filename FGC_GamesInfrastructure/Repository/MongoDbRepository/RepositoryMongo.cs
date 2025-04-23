@@ -7,9 +7,9 @@ using MongoDB.Driver;
 
 namespace FGC_Games.Infrastructure.Repository.MongoDbRepository
 {
-    public class RepositoryMongo : IMongoRepository
+    public class RepositoryMongo<T> where T : class
     {
-        private readonly IMongoCollection<Game> _games;
+        private readonly IMongoCollection<T> _games;
         public RepositoryMongo(ContextMongoDb contextMongoDb)
         {
             _games = contextMongoDb.gamesCollection;
