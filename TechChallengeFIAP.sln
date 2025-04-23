@@ -1,19 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35806.99 d17.13
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCG_Games", "FCG_Games\FCG_Games.csproj", "{A76194D5-4E7B-4047-B2D6-E5970C5FFBE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FCG_Games", "FCG_Games\FCG_Games.csproj", "{A76194D5-4E7B-4047-B2D6-E5970C5FFBE7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C75E5C70-097C-4CD5-AD1C-01D85395E269} = {C75E5C70-097C-4CD5-AD1C-01D85395E269}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FGC_Games.Application", "FGC_GamesApplication\FGC_Games.Application.csproj", "{0C197B87-DC5B-4659-92EC-155C37D73729}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FGC_Games.Application", "FGC_GamesApplication\FGC_Games.Application.csproj", "{0C197B87-DC5B-4659-92EC-155C37D73729}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FGC_Games.Domain", "FGC_GamesDomain\FGC_Games.Domain.csproj", "{DEDD93F5-A168-440F-8A69-11C28A4A700A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FGC_Games.Domain", "FGC_GamesDomain\FGC_Games.Domain.csproj", "{DEDD93F5-A168-440F-8A69-11C28A4A700A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FGC_Games.Infrastructure", "FGC_GamesInfrastructure\FGC_Games.Infrastructure.csproj", "{9D448A1C-C04F-4165-B29A-3FA582179088}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FGC_Games.Infrastructure", "FGC_GamesInfrastructure\FGC_Games.Infrastructure.csproj", "{9D448A1C-C04F-4165-B29A-3FA582179088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FGC_Games.Infrastructure.IoC", "FGC_Games.Infrastructure.IoC\FGC_Games.Infrastructure.IoC.csproj", "{C75E5C70-097C-4CD5-AD1C-01D85395E269}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FGC_Games.CrossCuting", "FGC_Games.Infrastructure.IoC\FGC_Games.CrossCuting.csproj", "{C75E5C70-097C-4CD5-AD1C-01D85395E269}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FGC_Games.Tests", "FGC_Games.Tests\FGC_Games.Tests.csproj", "{F5D76B74-AAA7-4F82-AF19-4F37695505DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FGC_Games.Tests", "FGC_Games.Tests\FGC_Games.Tests.csproj", "{F5D76B74-AAA7-4F82-AF19-4F37695505DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
