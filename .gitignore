@@ -1,2 +1,33 @@
 # Visual Studio
 .vs/
+*.user
+*.suo
+
+# Build
+bin/
+obj/
+out/
+
+# Rider
+.idea/
+
+# ASP.NET
+wwwroot/
+
+# Logs
+*.log
+
+# Others
+*.db
+*.DS_Store
+*.swp
+
+# Dependency caches
+packages/
+project.lock.json
+
+# User secrets
+secrets.json
+
+# Dotnet tools
+.tool-manifest
