@@ -1,0 +1,12 @@
+[
+  {
+    "ContainingType": "FCG.Controllers.UsuarioController",
+    "Method": "Index",
+    "RelativePath": "api/Usuario",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
