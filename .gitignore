@@ -3,10 +3,15 @@
 *.user
 *.suo
 
-# Build
+# Build results
 bin/
 obj/
 out/
+
+# Auto-generated files
+*.g.cs
+*.AssemblyInfo.cs
+Generated/
 
 # Rider
 .idea/
