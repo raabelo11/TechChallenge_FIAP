@@ -4,8 +4,8 @@
 *.suo
 
 # Build results
-bin/
-obj/
+**/obj/
+**/bin/
 out/
 
 # Auto-generated files
