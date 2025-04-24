@@ -11,5 +11,6 @@ namespace FCG.Infrastructure.Context
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Jogos> Jogos { get; set; }
     }
 }
