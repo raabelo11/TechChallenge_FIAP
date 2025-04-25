@@ -1,38 +1,10 @@
-# Visual Studio
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
 .vs/
-*.user
-*.suo
-
-# Build results
-**/obj/
-**/bin/
-out/
-
-# Auto-generated files
-*.g.cs
-*.AssemblyInfo.cs
-Generated/
-
-# Rider
-.idea/
-
-# ASP.NET
-wwwroot/
-
-# Logs
-*.log
-
-# Others
-*.db
-*.DS_Store
-*.swp
-
-# Dependency caches
+bin/
+build/
+obj/
 packages/
-project.lock.json
 
-# User secrets
-secrets.json
-
-# Dotnet tools
-.tool-manifest
+_excluded/

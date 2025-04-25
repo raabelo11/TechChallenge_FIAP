@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FCG.Domain.Interface
+﻿namespace FCG.Domain.Interface
 {
     public interface IRepositoryGeneric<TEntity> where TEntity : class
     {
