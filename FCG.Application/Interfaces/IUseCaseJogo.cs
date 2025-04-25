@@ -1,5 +1,4 @@
-﻿using FCG.Domain.Interface;
-using FCG.Domain.Models;
+﻿using FCG.Domain.Models;
 
 namespace FCG.Application.Interfaces
 {

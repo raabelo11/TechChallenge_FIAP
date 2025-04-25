@@ -1,6 +1,5 @@
 ﻿using FCG.Application.Interfaces;
 using FCG.Domain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.Controllers
