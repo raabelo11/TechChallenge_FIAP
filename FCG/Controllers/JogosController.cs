@@ -1,28 +1,32 @@
 ﻿using FCG.Application.Interfaces;
+using FCG.Domain.DTOs;
 using FCG.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class JogosController : ControllerBase
+    [Route("api/[controller]")]
+    public class JogosController(IUseCaseJogo useCaseJogo) : Controller
     {
-        private readonly IUseCaseJogo _jogoUseCase;
-        public JogosController(IUseCaseJogo jogo)
-        {
-            _jogoUseCase = jogo;
-        }
+        private readonly IUseCaseJogo _jogoUseCase = useCaseJogo;
+     
         [HttpGet("ListarJogos")]
-        public async Task<ActionResult<Jogos>> Get()
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> Get()
         {
-            var jogos = await _jogoUseCase.ListarJogos();
-            return Ok(jogos);
+            var response = await _jogoUseCase.ListarJogos();
+            return response.Ok ? Ok(response) : BadRequest(response);   
         }
-        [HttpPost]
-        public IActionResult Create()
+
+        [HttpPost("CriarJogo")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> Create(JogoDTO jogo)
         {
-            return CreatedAtAction(nameof(Index), new { id = 1 }, "Jogo criado com sucesso");
+           var response = await _jogoUseCase.Criar(jogo);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
         [HttpPut("{id}")]
         public IActionResult Update(int id)

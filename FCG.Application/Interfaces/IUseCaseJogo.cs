@@ -1,10 +1,11 @@
-﻿using FCG.Domain.Models;
+﻿using FCG.Domain.DTOs;
+using FCG.Domain.Models;
 
 namespace FCG.Application.Interfaces
 {
     public interface IUseCaseJogo 
     {
-        public Task<List<Jogos>> ListarJogos();
-        public Task<Jogos> Criar(Jogos jogos);
+        public Task<ApiResponse> ListarJogos();
+        public Task<ApiResponse> Criar(JogoDTO jogos);
     }
 }
