@@ -6,5 +6,6 @@ namespace FCG.Domain.Interface
     {
         Task<bool> Add(Usuario usuario);
         Task<List<Usuario>> List();
+        Task<Usuario?> GetByEmail(string email);
     }
 }

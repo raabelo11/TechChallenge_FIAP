@@ -15,7 +15,9 @@ namespace FCG.Domain.Models
         public string Descricao { get; set; } = string.Empty;
         [Required]
         [Range(10, 500, ErrorMessage = "Valor inválido")]
-        public decimal Preco { get; set; }
+        public decimal Preco => Preco * (1 - (Desconto / 100));
+
+        public int Desconto { get; set; }
         [Required(ErrorMessage = "Inserir categoria do jogo")]
         public Generos Categoria { get; set; }
     }

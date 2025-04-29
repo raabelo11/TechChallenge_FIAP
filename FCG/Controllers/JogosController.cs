@@ -1,11 +1,13 @@
 ﻿using FCG.Application.Interfaces;
 using FCG.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
     public class JogosController : ControllerBase
     {
         private readonly IUseCaseJogo _jogoUseCase;
@@ -19,6 +21,7 @@ namespace FCG.Controllers
             var jogos = await _jogoUseCase.ListarJogos();
             return Ok(jogos);
         }
+
         [HttpPost]
         public IActionResult Create()
         {

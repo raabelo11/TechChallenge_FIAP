@@ -17,7 +17,7 @@ namespace FCG.Application.UseCases
                 {
                     Nome = usuarioDTO.Nome,
                     Email = usuarioDTO.Email,
-                    Senha = usuarioDTO.Senha,
+                    Senha = BCrypt.Net.BCrypt.HashPassword(usuarioDTO.Senha),
                     Tipo = usuarioDTO.Tipo
                 };
 
@@ -53,6 +53,11 @@ namespace FCG.Application.UseCases
                     Errors = [$"{ex.Message}, {ex.StackTrace}"]
                 };
             }
+        }
+
+        public async Task<Usuario?> GetByEmail(string email)
+        {
+            return await _usuarioRepository.GetByEmail(email);
         }
     }
 }

@@ -19,5 +19,10 @@ namespace FCG.Infrastructure.Repository
         {
             return await _context.Usuarios.AsNoTracking().ToListAsync();
         }
+
+        public async Task<Usuario?> GetByEmail(string email)
+        {
+            return await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(p => p.Email == email);
+        }
     }
 }
