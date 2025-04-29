@@ -7,7 +7,7 @@ namespace FCG.Domain.Interface
         Task<TEntity> GetByIdAsync(int id);
         Task<List<TEntity>> GetAllAsync();
         Task<bool> AddAsync(TEntity entity);
-        Task<TEntity> UpdateAsync(TEntity entity);
-        Task<TEntity> DeleteAsync(int id);
+        Task<bool> UpdateAsync(int id,TEntity entity);
+        Task<bool> DeleteAsync(int id);
     }
 }

@@ -14,30 +14,10 @@ namespace FCG.Application.UseCases
             _jogoRepository = jogoRepository;
         }
 
-        public async Task<ApiResponse> Criar(JogoDTO jogo)
+        public async Task<bool> Criar(Jogos jogos)
         {
-            try
-            {
-                var game = new Jogos
-                {
-                    Nome = jogo.Nome,
-                    Descricao = jogo.Descricao,
-                    Categoria = jogo.Categoria,
-                    Preco = jogo.Preco
-                };
-                return new ApiResponse
-                {
-                    Ok = await _jogoRepository.AddAsync(game)
-                };
-
-            }
-            catch(Exception ex)
-            {
-                return new ApiResponse
-                {
-                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
-                };
-            }   
+           var jogoCriado = await _jogoRepository.AddAsync(jogos);
+            return jogoCriado;
         }
 
         public async Task<ApiResponse> ListarJogos()

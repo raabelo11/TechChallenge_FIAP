@@ -2,9 +2,10 @@
 
 namespace FCG.Domain.Interface
 {
-    public interface IUsuarioRepository
+    public interface IUsuarioRepository : IRepositoryGeneric<Usuario>
     {
-        Task<bool> Add(Usuario usuario);
-        Task<List<Usuario>> List();
+        //Task<bool> Add(Usuario usuario);
+        //Task<List<Usuario>> List();
+        Task<Usuario?> GetByEmail(string email);
     }
 }

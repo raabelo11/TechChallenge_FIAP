@@ -5,7 +5,7 @@ namespace FCG.Application.Interfaces
 {
     public interface IUseCaseJogo 
     {
-        public Task<ApiResponse> ListarJogos();
-        public Task<ApiResponse> Criar(JogoDTO jogos);
+        public Task<List<Jogos>> ListarJogos();
+        public Task<bool> Criar(Jogos jogos);
     }
 }

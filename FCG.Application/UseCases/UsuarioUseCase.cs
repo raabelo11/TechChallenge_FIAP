@@ -23,7 +23,7 @@ namespace FCG.Application.UseCases
 
                 return new ApiResponse
                 {
-                    Ok = await _usuarioRepository.Add(usuario),
+                    Ok = await _usuarioRepository.AddAsync(usuario),
                 };
                 
             }
@@ -43,7 +43,7 @@ namespace FCG.Application.UseCases
                 return new ApiResponse
                 {
                     Ok = true,
-                    Data = await _usuarioRepository.List()
+                    Data = await _usuarioRepository.GetAllAsync()
                 };
             }
             catch (Exception ex)
