@@ -14,10 +14,54 @@ namespace FCG.Application.UseCases
             _jogoRepository = jogoRepository;
         }
 
-        public async Task<bool> Criar(Jogos jogos)
+        public async Task<ApiResponse> Criar(JogoDTO jogos)
         {
-           var jogoCriado = await _jogoRepository.AddAsync(jogos);
-            return jogoCriado;
+            try
+            {
+                Jogos jogo = new Jogos()
+                {
+                    Categoria = jogos.Categoria,
+                    Descricao = jogos.Descricao,
+                    Nome = jogos.Nome,
+                    Preco = jogos.Preco
+
+                };
+
+                return new ApiResponse
+                {
+                    Data = jogo,
+                    Ok = await _jogoRepository.AddAsync(jogo),
+                };
+            }
+            catch (Exception ex)
+            {
+
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+
+
+        }
+
+        public async Task<ApiResponse> DeletarJogo(Guid guid)
+        {
+            try
+            {
+                return new ApiResponse
+                {
+                    Data = null,
+                    Ok = await _jogoRepository.DeleteAsync(guid),
+                };
+            }
+            catch (Exception ex) 
+            {
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
         }
 
         public async Task<ApiResponse> ListarJogos()
@@ -30,7 +74,7 @@ namespace FCG.Application.UseCases
                     Data = await _jogoRepository.GetAllAsync()
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new ApiResponse
                 {
@@ -38,5 +82,6 @@ namespace FCG.Application.UseCases
                 };
             }
         }
+
     }
 }

@@ -18,7 +18,7 @@ namespace FCG.Infrastructure.Repository
            
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var entity = _context.Set<Tentity>().Find(id);
             if (entity != null)
@@ -28,12 +28,6 @@ namespace FCG.Infrastructure.Repository
             }
             return false;
         }
-
-        public async Task<List<Tentity>> GetAllAsync()
-        {
-            return await _context.Set<Tentity>().ToListAsync();
-        }
-
         public async Task<Tentity> GetByIdAsync(int id)
         {
             return await _context.Set<Tentity>().FindAsync(id);

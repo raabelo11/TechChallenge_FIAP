@@ -1,4 +1,5 @@
-﻿using FCG.Application.Interfaces;
+﻿using System.Threading.Tasks;
+using FCG.Application.Interfaces;
 using FCG.Domain.DTOs;
 using FCG.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -33,10 +34,16 @@ namespace FCG.Controllers
         {
             return Ok($"Jogo {id} atualizado com sucesso");
         }
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("DeletarJogo/{id}")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            return Ok($"Jogo {id} deletado com sucesso");
+            var response = await _jogoUseCase.DeletarJogo(id);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
+        [HttpPatch]
+
+        [Produces(typeof(ApiResponse))]
     }
 }
