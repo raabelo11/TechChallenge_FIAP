@@ -2,6 +2,7 @@
 using FCG.Application.Interfaces;
 using FCG.Domain.DTOs;
 using FCG.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.Controllers

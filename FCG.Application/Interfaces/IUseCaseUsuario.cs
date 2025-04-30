@@ -7,5 +7,6 @@ namespace FCG.Application.Interfaces
     {
         Task<ApiResponse> Add(UsuarioDTO usuarioDTO);
         Task<ApiResponse> List();
+        Task<Usuario?> GetByEmail(string email);
     }
 }
