@@ -23,6 +23,7 @@ namespace FCG.Controllers
             return response.Ok ? Ok(response) : BadRequest(response);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet("Lista")]
         [Produces(typeof(List<Usuario>))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
