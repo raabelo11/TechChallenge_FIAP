@@ -43,8 +43,5 @@ namespace FCG.Controllers
             var response = await _jogoUseCase.DeletarJogo(id);
             return response.Ok ? Ok(response) : BadRequest(response);
         }
-        [HttpPatch]
-
-        [Produces(typeof(ApiResponse))]
     }
 }

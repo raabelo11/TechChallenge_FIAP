@@ -24,7 +24,6 @@ namespace FCG.Application.UseCases
                     Descricao = jogos.Descricao,
                     Nome = jogos.Nome,
                     Preco = jogos.Preco
-
                 };
 
                 return new ApiResponse
