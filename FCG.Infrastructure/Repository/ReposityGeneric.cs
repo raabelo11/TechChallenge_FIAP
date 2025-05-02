@@ -28,19 +28,19 @@ namespace FCG.Infrastructure.Repository
             }
             return false;
         }
-        public async Task<Tentity> GetByIdAsync(int id)
+        public async Task<Tentity> GetByIdAsync(Guid id)
         {
             return await _context.Set<Tentity>().FindAsync(id);
         }
 
-        public async Task<bool> UpdateAsync(int id,Tentity entity)
+        public async Task<bool> UpdateAsync(Tentity entity)
         {
-            var entityId = _context.Set<Tentity>().Find(id);
-            if (entityId != null)
-            {
+            //var entityId = _context.Set<Tentity>().Find(id);
+            //if (entityId != null)
+            //{
+            //}
                 _context.Set<Tentity>().Update(entity);
                 return await _context.SaveChangesAsync() > 0;
-            }
 
             return false;
         }

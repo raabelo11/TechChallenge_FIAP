@@ -30,11 +30,19 @@ namespace FCG.Controllers
            var response = await _jogoUseCase.Criar(jogo);
             return response.Ok ? Ok(response) : BadRequest(response);
         }
-        [HttpPut("{id}")]
-        public IActionResult Update(int id)
+        [Authorize(Policy = "AdminPolicy")]
+        [HttpPut("InserirDesconto/{id}")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> Update(int desconto, Guid id)
         {
-            return Ok($"Jogo {id} atualizado com sucesso");
+            var response = await _jogoUseCase.AtualizarJogo(id, desconto );
+            return response.Ok? Ok(response) : BadRequest(response);
         }
+        //public IActionResult Update(int id)
+        //{
+        //    return Ok($"Jogo {id} atualizado com sucesso");
+        //}
         [HttpDelete("DeletarJogo/{id}")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]

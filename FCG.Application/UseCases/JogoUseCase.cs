@@ -14,6 +14,36 @@ namespace FCG.Application.UseCases
             _jogoRepository = jogoRepository;
         }
 
+        public async Task<ApiResponse> AtualizarJogo(Guid guid, int desconto)
+        {
+            try
+            {
+                var jogo = _jogoRepository.GetByIdAsync(guid).Result;
+                if (jogo is null)
+                {
+                    return new ApiResponse
+                    {
+                        Errors = ["Jogo não encontrado"]
+                    };
+                }
+                jogo.Preco = jogo.Preco - (jogo.Preco * desconto / 100);
+                var result = await _jogoRepository.UpdateAsync(jogo);
+                return new ApiResponse
+                {
+                    Data = jogo,
+                    Ok = result
+                };
+            }
+
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+        }
+
         public async Task<ApiResponse> Criar(JogoDTO jogos)
         {
             try
@@ -54,7 +84,7 @@ namespace FCG.Application.UseCases
                     Ok = await _jogoRepository.DeleteAsync(guid),
                 };
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return new ApiResponse
                 {
