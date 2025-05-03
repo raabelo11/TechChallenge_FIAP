@@ -1,41 +1,55 @@
-﻿using FCG.Application.Interfaces;
+﻿using System.Threading.Tasks;
+using FCG.Application.Interfaces;
+using FCG.Domain.DTOs;
 using FCG.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class JogosController : ControllerBase
+    public class JogosController(IUseCaseJogo useCaseJogo) : Controller
     {
-        private readonly IUseCaseJogo _jogoUseCase;
-        public JogosController(IUseCaseJogo jogo)
-        {
-            _jogoUseCase = jogo;
-        }
+        private readonly IUseCaseJogo _jogoUseCase = useCaseJogo;
+     
         [HttpGet("ListarJogos")]
-        public async Task<ActionResult<Jogos>> Get()
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> Get()
         {
-            var jogos = await _jogoUseCase.ListarJogos();
-            return Ok(jogos);
+            var response = await _jogoUseCase.ListarJogos();
+            return response.Ok ? Ok(response) : BadRequest(response);   
         }
 
-        [HttpPost]
-        public IActionResult Create()
+        [HttpPost("CriarJogo")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> Create(JogoDTO jogo)
         {
-            return CreatedAtAction(nameof(Index), new { id = 1 }, "Jogo criado com sucesso");
+           var response = await _jogoUseCase.Criar(jogo);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
-        [HttpPut("{id}")]
-        public IActionResult Update(int id)
+        [Authorize(Policy = "AdminPolicy")]
+        [HttpPut("InserirDesconto/{id}")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> Update(int desconto, Guid id)
         {
-            return Ok($"Jogo {id} atualizado com sucesso");
+            var response = await _jogoUseCase.AtualizarJogo(id, desconto );
+            return response.Ok? Ok(response) : BadRequest(response);
         }
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        //public IActionResult Update(int id)
+        //{
+        //    return Ok($"Jogo {id} atualizado com sucesso");
+        //}
+        [HttpDelete("DeletarJogo/{id}")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            return Ok($"Jogo {id} deletado com sucesso");
+            var response = await _jogoUseCase.DeletarJogo(id);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using FCG.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace FCG.Domain.Models
+namespace FCG.Domain.DTOs
 {
-    public class Jogos
+    public class JogoDTO
     {
-        [Key]
-        public Guid IdJogo { get; set; } = Guid.NewGuid();
         [Required(ErrorMessage = "O nome do jogo é obrigatório!")]
         [StringLength(100)]
         public string Nome { get; set; } = string.Empty;

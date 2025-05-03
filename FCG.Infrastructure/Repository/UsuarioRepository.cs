@@ -5,24 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure.Repository
 {
-    public class UsuarioRepository(ApplicationDbContext context) : IUsuarioRepository
+    public class UsuarioRepository : ReposityGeneric<Usuario>, IUsuarioRepository
     {
-        private ApplicationDbContext _context = context;
-
-        public async Task<bool> Add(Usuario usuario)
+        private readonly ApplicationDbContext _context;
+        public UsuarioRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            await _context.Usuarios.AddAsync(usuario);
-            return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<List<Usuario>> List()
-        {
-            return await _context.Usuarios.AsNoTracking().ToListAsync();
+            _context = dbContext;
         }
 
         public async Task<Usuario?> GetByEmail(string email)
         {
-            return await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(p => p.Email == email);
+            return await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email);
         }
+
     }
 }

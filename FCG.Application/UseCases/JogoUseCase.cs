@@ -1,4 +1,5 @@
 ﻿using FCG.Application.Interfaces;
+using FCG.Domain.DTOs;
 using FCG.Domain.Interface;
 using FCG.Domain.Models;
 
@@ -13,15 +14,103 @@ namespace FCG.Application.UseCases
             _jogoRepository = jogoRepository;
         }
 
-        public async Task<Jogos> Criar(Jogos jogos)
+        public async Task<ApiResponse> AtualizarJogo(Guid guid, int desconto)
         {
-           var jogoCriado = await _jogoRepository.AddAsync(jogos);
-            return jogoCriado;
+            try
+            {
+                var jogo = _jogoRepository.GetByIdAsync(guid).Result;
+                if (jogo is null)
+                {
+                    return new ApiResponse
+                    {
+                        Errors = ["Jogo não encontrado"]
+                    };
+                }
+                jogo.Preco = jogo.Preco - (jogo.Preco * desconto / 100);
+                var result = await _jogoRepository.UpdateAsync(jogo);
+                return new ApiResponse
+                {
+                    Data = jogo,
+                    Ok = result
+                };
+            }
+
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
         }
 
-        public async Task<List<Jogos>> ListarJogos()
+        public async Task<ApiResponse> Criar(JogoDTO jogos)
         {
-            return await _jogoRepository.GetAllAsync();
+            try
+            {
+                Jogos jogo = new Jogos()
+                {
+                    Categoria = jogos.Categoria,
+                    Descricao = jogos.Descricao,
+                    Nome = jogos.Nome,
+                    Preco = jogos.Preco
+                };
+
+                return new ApiResponse
+                {
+                    Data = jogo,
+                    Ok = await _jogoRepository.AddAsync(jogo),
+                };
+            }
+            catch (Exception ex)
+            {
+
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+
+
         }
+
+        public async Task<ApiResponse> DeletarJogo(Guid guid)
+        {
+            try
+            {
+                return new ApiResponse
+                {
+                    Data = null,
+                    Ok = await _jogoRepository.DeleteAsync(guid),
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+        }
+
+        public async Task<ApiResponse> ListarJogos()
+        {
+            try
+            {
+                return new ApiResponse
+                {
+                    Ok = true,
+                    Data = await _jogoRepository.GetAllAsync()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+        }
+
     }
 }
