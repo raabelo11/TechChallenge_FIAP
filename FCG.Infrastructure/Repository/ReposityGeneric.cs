@@ -35,14 +35,8 @@ namespace FCG.Infrastructure.Repository
 
         public async Task<bool> UpdateAsync(Tentity entity)
         {
-            //var entityId = _context.Set<Tentity>().Find(id);
-            //if (entityId != null)
-            //{
-            //}
-                _context.Set<Tentity>().Update(entity);
-                return await _context.SaveChangesAsync() > 0;
-
-            return false;
+            _context.Set<Tentity>().Update(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

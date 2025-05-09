@@ -14,7 +14,7 @@ namespace FCG.Controllers
         private readonly IUseCaseUsuario _usuarioUseCase = usuarioUseCase;
 
         [AllowAnonymous]
-        [HttpPost("Incluir")]
+        [HttpPost("CriarUsuario")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> Add([FromBody] UsuarioDTO usuarioDTO)
@@ -24,7 +24,7 @@ namespace FCG.Controllers
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        [HttpGet("Lista")]
+        [HttpGet("ListarUsuario")]
         [Produces(typeof(List<Usuario>))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> List()
@@ -34,17 +34,33 @@ namespace FCG.Controllers
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        [HttpPut]
-        public ActionResult Rascunho2()
+        [HttpGet("ListarUsuario/{id}")]
+        [Produces(typeof(List<Usuario>))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> List(Guid id)
         {
-            return Ok();
+            var response = await _usuarioUseCase.ListById(id);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        [HttpDelete]
-        public ActionResult Rascunho()
+        [HttpPut("AlterarUsuario")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> Update(UsuarioUpdateDTO usuarioUpdateDTO)
         {
-            return Ok();
+            var response = await _usuarioUseCase.Update(usuarioUpdateDTO);
+            return response.Ok ? Ok(response) : BadRequest(response);
+        }
+
+        [Authorize(Policy = "AdminPolicy")]
+        [HttpDelete("DeletarUsuario")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> Delete(Guid id)
+        {
+            var response = await _usuarioUseCase.Delete(id);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
     }
 }
