@@ -20,7 +20,7 @@ namespace FCG.Controllers
         public async Task<ActionResult<ApiResponse>> Add([FromBody] UsuarioDTO usuarioDTO)
         {
             var response = await _usuarioUseCase.Add(usuarioDTO);
-            return response.Ok ? Ok(response) : BadRequest(response);
+           return response.Ok ? Ok(response) : BadRequest(response);
         }
 
         [Authorize(Policy = "AdminPolicy")]
@@ -31,20 +31,6 @@ namespace FCG.Controllers
         {
             var response = await _usuarioUseCase.List();
             return response.Ok ? Ok(response) : BadRequest(response);
-        }
-
-        [Authorize(Policy = "AdminPolicy")]
-        [HttpPut]
-        public ActionResult Rascunho2()
-        {
-            return Ok();
-        }
-
-        [Authorize(Policy = "AdminPolicy")]
-        [HttpDelete]
-        public ActionResult Rascunho()
-        {
-            return Ok();
         }
     }
 }

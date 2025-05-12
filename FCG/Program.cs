@@ -1,9 +1,11 @@
 using FCG.Application.Authorization;
 using FCG.Application.Interfaces;
+using FCG.Application.Logging;
 using FCG.Application.UseCases;
 using FCG.Domain.Interface;
 using FCG.Infrastructure.Context;
 using FCG.Infrastructure.Repository;
+using FCG.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,7 +27,6 @@ builder.Services.AddScoped<IUseCaseJogo, JogoUseCase>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUseCaseUsuario, UsuarioUseCase>();
-
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -95,6 +96,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Logging.AddProvider(new CustomerLoggerProvider(new CustomLoggerProviderConfiguration { LogLevel = LogLevel.Information }));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -102,6 +104,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ConfigureExceptionHandler();
+    app.UseLogging();
 }
 
 app.UseHttpsRedirection();
