@@ -19,7 +19,6 @@ namespace FCG.Controllers
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> Get()
         {
-            throw new NotImplementedException("Método não implementado");
             var response = await _jogoUseCase.ListarJogos();
            return response.Ok ? Ok(response) : BadRequest(response);
         }

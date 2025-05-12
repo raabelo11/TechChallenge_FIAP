@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace FCG.Application.Logging
@@ -35,7 +36,14 @@ namespace FCG.Application.Logging
         }
         private void WriteLog(string message)
         {
-            string directory = @"C:\FIAP Cloud Games Log\log.txt";
+            var directory = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build().GetValue<string>("Directory:path");
+
+            var x = new ConfigurationManager().GetValue<string>("Directory:path");
+
+
             using (StreamWriter streamWriter = new StreamWriter(directory, true))
             {
                 try
