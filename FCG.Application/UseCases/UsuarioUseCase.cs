@@ -12,7 +12,18 @@ namespace FCG.Application.UseCases
         public async Task<ApiResponse> Add(UsuarioDTO usuarioDTO)
         {
             try
-            {              
+            {
+                var checkEmail = await _usuarioRepository.GetByEmail(usuarioDTO.Email);
+
+                if (checkEmail != null)
+                {
+                    return new ApiResponse
+                    {
+                        Ok = true,
+                        Data = "E-mail já existente."
+                    };
+                }
+
                 var usuario = new Usuario
                 {
                     Nome = usuarioDTO.Nome,
@@ -83,21 +94,36 @@ namespace FCG.Application.UseCases
             {
                 var usuario = await _usuarioRepository.GetByIdAsync(usuarioUpdateDTO.Id);
 
-                usuario = new Usuario()
+                if (usuario.Email != usuarioUpdateDTO.Email)
                 {
-                    Nome = usuarioUpdateDTO.Nome,
-                    Email = usuarioUpdateDTO.Email,
-                    Senha = usuarioUpdateDTO.Senha,
-                    Tipo = usuarioUpdateDTO.Tipo
-                };
+                    var checkEmail = await _usuarioRepository.GetByEmail(usuarioUpdateDTO.Email);
+
+                    if (checkEmail != null)
+                    {
+                        return new ApiResponse
+                        {
+                            Ok = true,
+                            Data = "E-mail já existente."
+                        };
+                    }
+                }
 
                 if (usuario != null)
                 {
+                    usuario.Nome = usuarioUpdateDTO.Nome;
+                    usuario.Email = usuarioUpdateDTO.Email;
+                    usuario.Senha = BCrypt.Net.BCrypt.HashPassword(usuarioUpdateDTO.Senha);
+                    usuario.Tipo = usuarioUpdateDTO.Tipo;
+
                     var update = await _usuarioRepository.UpdateAsync(usuario);
                 }
                 else
                 {
-                    bool sucesso = await _usuarioRepository.AddAsync(usuario);
+                    return new ApiResponse
+                    {
+                        Ok = true,
+                        Data = "Nenhuma alteração foi realizada."
+                    };
                 }
 
                 return new ApiResponse
