@@ -41,9 +41,6 @@ namespace FCG.Application.Logging
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build().GetValue<string>("Directory:path");
 
-            var x = new ConfigurationManager().GetValue<string>("Directory:path");
-
-
             using (StreamWriter streamWriter = new StreamWriter(directory, true))
             {
                 try
