@@ -22,4 +22,9 @@ namespace FCG.Domain.DTOs
         [Required]
         public TipoUsuario Tipo { get; set; }
     }
+
+    public class UsuarioUpdateDTO : UsuarioDTO
+    {
+        public Guid Id { get; set; }
+    }
 }

@@ -15,7 +15,6 @@ namespace FCG.Infrastructure.Repository
         {
             _context.Set<Tentity>().Add(entity);
             return await _context.SaveChangesAsync() > 0;
-           
         }
 
         public async Task<bool> DeleteAsync(Guid id)
@@ -28,6 +27,14 @@ namespace FCG.Infrastructure.Repository
             }
             return false;
         }
+
+        public async Task<Tentity> GetByEmail(string email)
+        {
+            return await _context.Set<Tentity>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => EF.Property<string>(x, "Email") == email);
+        }
+
         public async Task<Tentity> GetByIdAsync(Guid id)
         {
             return await _context.Set<Tentity>().FindAsync(id);
@@ -35,14 +42,8 @@ namespace FCG.Infrastructure.Repository
 
         public async Task<bool> UpdateAsync(Tentity entity)
         {
-            //var entityId = _context.Set<Tentity>().Find(id);
-            //if (entityId != null)
-            //{
-            //}
-                _context.Set<Tentity>().Update(entity);
-                return await _context.SaveChangesAsync() > 0;
-
-            return false;
+            _context.Set<Tentity>().Update(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

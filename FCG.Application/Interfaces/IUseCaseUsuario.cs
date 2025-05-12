@@ -7,6 +7,8 @@ namespace FCG.Application.Interfaces
     {
         Task<ApiResponse> Add(UsuarioDTO usuarioDTO);
         Task<ApiResponse> List();
-        Task<Usuario?> GetByEmail(string email);
+        Task<ApiResponse> ListById(Guid id);
+        Task<ApiResponse> Update(UsuarioUpdateDTO usuarioUpdateDTO);
+        Task<ApiResponse> Delete(Guid id);
     }
 }
