@@ -12,7 +12,18 @@ namespace FCG.Application.UseCases
         public async Task<ApiResponse> Add(UsuarioDTO usuarioDTO)
         {
             try
-            {              
+            {
+                var checkEmail = await _usuarioRepository.GetByEmail(usuarioDTO.Email);
+
+                if (checkEmail != null)
+                {
+                    return new ApiResponse
+                    {
+                        Ok = true,
+                        Data = "E-mail já existente."
+                    };
+                }
+
                 var usuario = new Usuario
                 {
                     Nome = usuarioDTO.Nome,
@@ -31,6 +42,7 @@ namespace FCG.Application.UseCases
             {
                 return new ApiResponse
                 {
+                    Ok = false,
                     Errors = [$"{ex.Message}, {ex.StackTrace}"]
                 };
             }
@@ -50,14 +62,96 @@ namespace FCG.Application.UseCases
             {
                 return new ApiResponse
                 {
+                    Ok = false,
                     Errors = [$"{ex.Message}, {ex.StackTrace}"]
                 };
             }
         }
 
-        public async Task<Usuario?> GetByEmail(string email)
+        public async Task<ApiResponse> ListById(Guid id)
         {
-            return await _usuarioRepository.GetByEmail(email);
+            try
+            {
+                return new ApiResponse
+                {
+                    Ok = true,
+                    Data = await _usuarioRepository.GetByIdAsync(id)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Ok = false,
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+        }
+
+        public async Task<ApiResponse> Update(UsuarioUpdateDTO usuarioUpdateDTO)
+        {
+            try
+            {
+                var usuario = await _usuarioRepository.GetByIdAsync(usuarioUpdateDTO.Id);
+
+                if (usuario.Email != usuarioUpdateDTO.Email)
+                {
+                    var checkEmail = await _usuarioRepository.GetByEmail(usuarioUpdateDTO.Email);
+
+                    if (checkEmail != null)
+                    {
+                        return new ApiResponse
+                        {
+                            Ok = true,
+                            Data = "E-mail já existente."
+                        };
+                    }
+                }
+
+                if (usuario != null)
+                {
+                    usuario.Nome = usuarioUpdateDTO.Nome;
+                    usuario.Email = usuarioUpdateDTO.Email;
+                    usuario.Senha = BCrypt.Net.BCrypt.HashPassword(usuarioUpdateDTO.Senha);
+                    usuario.Tipo = usuarioUpdateDTO.Tipo;
+
+                    var update = await _usuarioRepository.UpdateAsync(usuario);
+                }
+                else
+                {
+                    return new ApiResponse
+                    {
+                        Ok = true,
+                        Data = "Nenhuma alteração foi realizada."
+                    };
+                }
+
+                return new ApiResponse
+                {
+                    Ok = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Ok = false,
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+        }
+
+        public async Task<ApiResponse> Delete (Guid id)
+        {
+            if (await _usuarioRepository.GetByIdAsync(id) != null)
+            {
+                bool sucesso = await _usuarioRepository.DeleteAsync(id);
+            }
+
+            return new ApiResponse
+            {
+                Ok = true,
+            };
         }
     }
 }
