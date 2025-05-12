@@ -20,7 +20,7 @@ namespace FCG.Controllers
         public async Task<ActionResult<ApiResponse>> Add([FromBody] UsuarioDTO usuarioDTO)
         {
             var response = await _usuarioUseCase.Add(usuarioDTO);
-            return response.Ok ? Ok(response) : BadRequest(response);
+           return response.Ok ? Ok(response) : BadRequest(response);
         }
 
         [Authorize(Policy = "AdminPolicy")]
