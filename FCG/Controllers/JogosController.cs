@@ -12,22 +12,24 @@ namespace FCG.Controllers
     public class JogosController(IUseCaseJogo useCaseJogo) : Controller
     {
         private readonly IUseCaseJogo _jogoUseCase = useCaseJogo;
-     
+
+        [AllowAnonymous]
         [HttpGet("ListarJogos")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> Get()
         {
+            throw new NotImplementedException("Método não implementado");
             var response = await _jogoUseCase.ListarJogos();
-            return response.Ok ? Ok(response) : BadRequest(response);   
+           return response.Ok ? Ok(response) : BadRequest(response);
         }
-
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost("CriarJogo")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> Create(JogoDTO jogo)
         {
-           var response = await _jogoUseCase.Criar(jogo);
+            var response = await _jogoUseCase.Criar(jogo);
             return response.Ok ? Ok(response) : BadRequest(response);
         }
         [Authorize(Policy = "AdminPolicy")]
@@ -36,13 +38,11 @@ namespace FCG.Controllers
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> Update(int desconto, Guid id)
         {
-            var response = await _jogoUseCase.AtualizarJogo(id, desconto );
-            return response.Ok? Ok(response) : BadRequest(response);
+            
+            var response = await _jogoUseCase.AtualizarJogo(id, desconto);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
-        //public IActionResult Update(int id)
-        //{
-        //    return Ok($"Jogo {id} atualizado com sucesso");
-        //}
+        [Authorize(Policy = "AdminPolicy")] 
         [HttpDelete("DeletarJogo/{id}")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
