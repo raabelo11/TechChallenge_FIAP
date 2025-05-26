@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Sua API", Version = "v1" });
 
-    // Configurar Bearer
+    // Configurações do Bearer no Swagger
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -88,6 +88,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Adicionando politicas de acordo com a Role do usuário para autenticação.
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy =>
@@ -99,15 +100,10 @@ builder.Services.AddAuthorization(options =>
 builder.Logging.AddProvider(new CustomerLoggerProvider(new CustomLoggerProviderConfiguration { LogLevel = LogLevel.Information }));
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.ConfigureExceptionHandler();
-    app.UseLogging();
-}
-
+app.UseSwagger();
+app.UseSwaggerUI();
+app.ConfigureExceptionHandler();
+app.UseLogging();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
