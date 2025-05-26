@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FCG.Application.Interfaces;
+using FCG.Application.UseCases;
 using FCG.Controllers;
 using FCG.Domain.DTOs;
+using FCG.Domain.Interface;
 using FCG.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -91,22 +93,34 @@ namespace FGC.Tests
         public async Task AtualizarJogo_Valido()
         {
             // Arrange
-            var jogoId = Guid.NewGuid();
-            int desconto = -10; // Valor do desconto
-            var response = new ApiResponse
+            var jogoId = new Guid("BDC6DB83-4C0A-4E1A-ACB8-DAB816E36CD5");
+            int desconto = -10;
+
+            var jogo = new Jogos
             {
-                Ok = false,
-                Errors = ["Não foi possível atualizar esse jogo"]
+                IdJogo = jogoId,
+                Nome = "Senhor dos, aneis",
+                Preco = 100,
+                Descricao = "eteste",
+                Categoria = FCG.Domain.Enums.Generos.Aventura
             };
-            var mockService = new Mock<IUseCaseJogo>();
-            mockService.Setup(s => s.AtualizarJogo(jogoId, desconto)).ReturnsAsync(response);
-            var controller = new JogosController(mockService.Object);
+
+            var mockRepository = new Mock<IJogoRepository>();
+
+            // Mocka o retorno do banco de dados
+            mockRepository.Setup(r => r.GetByIdAsync(jogoId)).ReturnsAsync(jogo);
+            mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Jogos>())).ReturnsAsync(true);
+
+            var useCase = new JogoUseCase(mockRepository.Object);
+
             // Act
-            var result = await controller.Update(desconto, jogoId);
+            // Valida a logica, como se tivesse o retorno do banco de dados
+            var result = await useCase.AtualizarJogo(jogoId, desconto);
+
             // Assert
-            var okResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-            var apiResponse = Assert.IsType<ApiResponse>(okResult.Value);
-            Assert.Contains("Não foi possível atualizar esse jogo", apiResponse.Errors);
+            // Valida o que vc quiser
+            Assert.False(result.Ok);
+            Assert.Contains("Não foi possível atualizar esse jogo", result.Errors);
         }
     }
 }
