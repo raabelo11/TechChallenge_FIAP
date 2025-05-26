@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-
-namespace FCG.Middleware
+﻿namespace FCG.Middleware
 {
     public class Logging
     {
@@ -21,7 +17,7 @@ namespace FCG.Middleware
 
             await _next(httpContext);
 
-            _logger.LogInformation("=============== RESPONSE DA REQUEST: {StatusCode}", httpContext.Response.StatusCode);
+            _logger.LogInformation("=============== STATUS CODE DA REQUEST: {StatusCode}", httpContext.Response.StatusCode);
         }
     }
 

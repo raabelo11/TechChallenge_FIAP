@@ -141,17 +141,36 @@ namespace FCG.Application.UseCases
             }
         }
 
-        public async Task<ApiResponse> Delete (Guid id)
+        public async Task<ApiResponse> Delete(Guid id)
         {
-            if (await _usuarioRepository.GetByIdAsync(id) != null)
+            try
             {
-                bool sucesso = await _usuarioRepository.DeleteAsync(id);
-            }
+                if (await _usuarioRepository.GetByIdAsync(id) != null)
+                {
+                    bool sucesso = await _usuarioRepository.DeleteAsync(id);
+                }
+                else
+                {
+                    return new ApiResponse
+                    {
+                        Ok = true,
+                        Data = "Nenhuma alteração foi realizada."
+                    };
+                }
 
-            return new ApiResponse
+                return new ApiResponse
+                {
+                    Ok = true,
+                };
+            }
+            catch (Exception ex)
             {
-                Ok = true,
-            };
+                return new ApiResponse
+                {
+                    Ok = false,
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
         }
     }
 }
