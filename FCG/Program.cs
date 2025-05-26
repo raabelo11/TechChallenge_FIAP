@@ -9,6 +9,7 @@ using FCG.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,8 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Sua API", Version = "v1" });
 
+    var filePath = Path.Combine(System.AppContext.BaseDirectory, "FCG.xml");
+    options.IncludeXmlComments(filePath);
     // Configurações do Bearer no Swagger
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {

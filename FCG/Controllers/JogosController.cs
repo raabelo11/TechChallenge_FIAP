@@ -14,13 +14,18 @@ namespace FCG.Controllers
         private readonly IUseCaseJogo _jogoUseCase = useCaseJogo;
 
         [AllowAnonymous]
+        /// <summary>
+        /// Descrição do seu end point.
+        /// </summary>
+        /// <remarks>Destalhes sobre seu end point</remarks>
+        /// <response code="200">explique seu retorno em caso de sucesso</response>
         [HttpGet("ListarJogos")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> Get()
         {
             var response = await _jogoUseCase.ListarJogos();
-           return response.Ok ? Ok(response) : BadRequest(response);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
         [Authorize(Policy = "AdminPolicy")]
         [HttpPost("CriarJogo")]
@@ -37,11 +42,11 @@ namespace FCG.Controllers
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> Update(int desconto, Guid id)
         {
-            
+
             var response = await _jogoUseCase.AtualizarJogo(id, desconto);
             return response.Ok ? Ok(response) : BadRequest(response);
         }
-        [Authorize(Policy = "AdminPolicy")] 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("DeletarJogo/{id}")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
