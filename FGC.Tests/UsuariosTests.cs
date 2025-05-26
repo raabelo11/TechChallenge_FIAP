@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FGC.Tests
 {
-    public class UnitTest1
+    public class UsuariosTests
     {
         [Fact]
         public async Task RetornarListaDeUsuariosValida()
