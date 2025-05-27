@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.Controllers
 {
+    /// <summary>
+    ///     API Usuarios
+    /// </summary>
+    /// <param name="usuarioUseCase"></param>
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
@@ -13,6 +17,11 @@ namespace FCG.Controllers
     {
         private readonly IUseCaseUsuario _usuarioUseCase = usuarioUseCase;
 
+        /// <summary>
+        ///     Endpoint responsável por criar um usuário dos tipos Usuario = 1, Administrador = 2
+        /// </summary>
+        /// <param name="usuarioDTO"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("CriarUsuario")]
         [Produces(typeof(ApiResponse))]
@@ -23,6 +32,10 @@ namespace FCG.Controllers
            return response.Ok ? Ok(response) : BadRequest(response);
         }
 
+        /// <summary>
+        ///     Endpoint responsável por listar todos os usuários do sistema
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "AdminPolicy")]
         [HttpGet("ListarUsuario")]
         [Produces(typeof(List<Usuario>))]
@@ -33,9 +46,14 @@ namespace FCG.Controllers
             return response.Ok ? Ok(response) : BadRequest(response);
         }
 
+        /// <summary>
+        ///     Endpoint responsável por listar um usuário por id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "AdminPolicy")]
         [HttpGet("ListarUsuario/{id}")]
-        [Produces(typeof(List<Usuario>))]
+        [Produces(typeof(Usuario))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> List(Guid id)
         {
@@ -43,6 +61,11 @@ namespace FCG.Controllers
             return response.Ok ? Ok(response) : BadRequest(response);
         }
 
+        /// <summary>
+        ///     Endpoint responsável por alterar um usuário
+        /// </summary>
+        /// <param name="usuarioUpdateDTO"></param>
+        /// <returns></returns>
         [Authorize(Policy = "AdminPolicy")]
         [HttpPut("AlterarUsuario")]
         [Produces(typeof(ApiResponse))]
@@ -53,6 +76,11 @@ namespace FCG.Controllers
             return response.Ok ? Ok(response) : BadRequest(response);
         }
 
+        /// <summary>
+        ///     Endpoint responsável por excluir um usuário pelo seu id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("DeletarUsuario")]
         [Produces(typeof(ApiResponse))]
