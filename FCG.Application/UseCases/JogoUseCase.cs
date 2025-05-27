@@ -19,11 +19,11 @@ namespace FCG.Application.UseCases
             try
             {
                 var jogo = _jogoRepository.GetByIdAsync(guid).Result;
-                if (jogo is null)
+                if (jogo is null || desconto < 0)
                 {
                     return new ApiResponse
                     {
-                        Errors = ["Jogo não encontrado"]
+                        Errors = ["Não foi possível atualizar esse jogo"]
                     };
                 }
                 jogo.Preco = jogo.Preco - (jogo.Preco * desconto / 100);
