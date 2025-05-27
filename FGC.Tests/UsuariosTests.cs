@@ -1,80 +1,93 @@
-using FCG.Application.Interfaces;
-using FCG.Controllers;
+using Castle.Core.Logging;
+using FCG.Application.UseCases;
 using FCG.Domain.DTOs;
 using FCG.Domain.Enums;
+using FCG.Domain.Interface;
 using FCG.Domain.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace FGC.Tests
 {
     public class UsuariosTests
     {
-        [Fact]
-        public async Task RetornarListaDeUsuariosValida()
+        [Fact(DisplayName = "Dado que o e-mail já existe, quando tentar criar um usuário, então deve retornar mensagem de e-mail duplicado")]
+        public async Task ValidarCriacaoDeUsuarioComEmailJaExistenteNaBaseDeDados()
         {
             // Arrange
-            var usuarios = new List<Usuario>
+            // Objeto de retorno (mockando retorno do banco de dados para validar a lógica do método).
+            var usuario = new Usuario()
             {
-                new Usuario { IdUsuario = Guid.NewGuid(), Nome = "João", Email = "joao@teste.com" }
+                IdUsuario = new Guid(),
+                Nome = "Guilherme Magalhães",
+                Email = "guilherme2025@gmail.com",
+                Senha = "criacaoABDESS123@@",
+                Tipo = TipoUsuario.Usuario
             };
 
-            var apiResponse = new ApiResponse
+            // Objeto de entrada DTO
+            var usuarioDTO = new UsuarioDTO()
             {
-                Ok = true,
-                Data = usuarios
+                Nome = "Guilherme Lima",
+                Email = "guilherme2025@gmail.com",
+                Senha = "senhaTESTE123@@",
+                Tipo = TipoUsuario.Usuario
             };
 
-            var mockService = new Mock<IUseCaseUsuario>();
-            mockService.Setup(s => s.List()).ReturnsAsync(apiResponse);
-            var controller = new UsuariosController(mockService.Object);
+            var mockLog = new Mock<ILogger<UsuarioUseCase>>();
+            var mockRepository = new Mock<IUsuarioRepository>();
+            mockRepository.Setup(r => r.GetByEmail(usuario.Email)).ReturnsAsync(usuario);
+
+            var useCase = new UsuarioUseCase(mockRepository.Object, mockLog.Object);
 
             // Act
-            var result = await controller.List();
+            var result = await useCase.Add(usuarioDTO);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var response = Assert.IsType<ApiResponse>(okResult.Value);
-            var data = Assert.IsAssignableFrom<IEnumerable<Usuario>>(response.Data);
-            Assert.Single(data);
+            Assert.Contains("E-mail já existente.", Convert.ToString(result.Data));
+            Assert.True(result.Ok);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Dado que os dados do usuário são válidos, quando criar o usuário, então deve retornar sucesso")]
         public async Task CriarUsuarioComSucesso()
         {
             // Arrange
-            var novoUsuario = new UsuarioDTO
+            // Objeto de entrada DTO
+            var usuarioDTO = new UsuarioDTO()
             {
-                Nome = "Guilherme",
+                Nome = "Guilherme Lima",
                 Email = "guilherme@gmail.com",
-                Senha = "12ggfGD@@#34",
-                Tipo = TipoUsuario.Administrador
+                Senha = "senhaTESTE123@@",
+                Tipo = TipoUsuario.Usuario
             };
 
-            var context = new ValidationContext(novoUsuario, null, null);
-            var validationResults = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(novoUsuario, context, validationResults, true);
+            // Objeto de entrada banco de dados (Mock)
+            var usuario = new Usuario()
+            {
+                IdUsuario = new Guid(),
+                Nome = "Guilherme Magalhães",
+                Email = "guilherme2025@gmail.com",
+                Senha = "criacaoABDESS123@@",
+                Tipo = TipoUsuario.Usuario
+            };
 
-            var response = new ApiResponse { Ok = true };
+            var mockLog = new Mock<ILogger<UsuarioUseCase>>();
+            var mockRepository = new Mock<IUsuarioRepository>();
+            mockRepository.Setup(r => r.GetByEmail(usuarioDTO.Email)).ReturnsAsync(usuario);
+            mockRepository.Setup(r => r.AddAsync(It.IsAny<Usuario>())).ReturnsAsync(true);
 
-            var mockService = new Mock<IUseCaseUsuario>();
-            mockService.Setup(s => s.Add(novoUsuario)).ReturnsAsync(response);
-
-            var controller = new UsuariosController(mockService.Object);
+            var useCase = new UsuarioUseCase(mockRepository.Object, mockLog.Object);
 
             // Act
-            var result = await controller.Add(novoUsuario);
+            var result = await useCase.Add(usuarioDTO);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var responseResult = Assert.IsType<ApiResponse>(okResult.Value);
-
-            Assert.True(responseResult.Ok);
-            Assert.True(isValid);
+            Assert.True(result.Ok);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Dado que o e-mail e a senha são inválidos, quando validar o usuário, então deve falhar na validação")]
         public void CriarUsuarioComEmailESenhaInvalidos_DeveFalharNaValidacao()
         {
             // Arrange
@@ -90,6 +103,7 @@ namespace FGC.Tests
             var validationResults = new List<ValidationResult>();
 
             // Act
+            // Valida pelo data Anotations as propriedades preenchidas de UsuarioDTO
             var isValid = Validator.TryValidateObject(usuarioInvalido, context, validationResults, true);
 
             // Assert
@@ -97,34 +111,28 @@ namespace FGC.Tests
             Assert.Contains(validationResults, v => v.ErrorMessage!.Contains("E-mail inválido"));
         }
 
-        [Fact]
-        public async Task RetornarListaUsuarios_Vazia()
+        [Fact(DisplayName = "Dado que não há usuários cadastrados, quando listar usuários, então deve retornar uma lista vazia sem erros")]
+        public async Task RetornarListaUsuariosVaziaSemErros()
         {
             // Arrange
             var usuarios = new List<Usuario>(); // Lista vazia
 
-            var apiResponse = new ApiResponse
-            {
-                Ok = true,
-                Data = usuarios
-            };
+            var mockLog = new Mock<ILogger<UsuarioUseCase>>();
+            var mockRepository = new Mock<IUsuarioRepository>();
+            mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(usuarios);
 
-            var mockService = new Mock<IUseCaseUsuario>();
-            mockService.Setup(s => s.List()).ReturnsAsync(apiResponse);
-            var controller = new UsuariosController(mockService.Object);
+            var useCase = new UsuarioUseCase(mockRepository.Object, mockLog.Object);
 
             // Act
-            var result = await controller.List();
+            var result = await useCase.List();
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var response = Assert.IsType<ApiResponse>(okResult.Value);
-            var data = Assert.IsAssignableFrom<IEnumerable<Usuario>>(response.Data);
-            Assert.Empty(data);
+            var dataResult = result.Data as ICollection;
+            Assert.True(dataResult.Count == 0);
         }
 
-        [Fact]
-        public async Task AtualizarUsuarioInexistenteValidaçãoDoDataOkEStatusCode()
+        [Fact(DisplayName = "Dado que o usuário não existe na base, quando tentar atualizar, então deve retornar mensagem indicando nenhuma alteração realizada")]
+        public async Task AtualizarUsuarioInexistenteNaBaseDeDados()
         {
             // Arrange
             var usuarioInvalido = new UsuarioUpdateDTO
@@ -136,51 +144,47 @@ namespace FGC.Tests
                 Tipo = TipoUsuario.Usuario
             };
 
-            var mockService = new Mock<IUseCaseUsuario>();
-            mockService
-                .Setup(s => s.Update(usuarioInvalido))
-                .ReturnsAsync(new ApiResponse
-                {
-                    Ok = true,
-                    Data = "Nenhuma alteração foi realizada."
-                });
-
-            var controller = new UsuariosController(mockService.Object);
-
-            // Act
-            var result = await controller.Update(usuarioInvalido);
-
-            // Assert
-            var statusCode = Assert.IsType<OkObjectResult>(result.Result);
-            var response = Assert.IsType<ApiResponse>(statusCode.Value);
-
-            Assert.True(response.Ok);
-            Assert.Contains("Nenhuma alteração foi realizada.", Convert.ToString(response.Data));
-        }
-
-        [Fact]
-        public async Task DeletarUsuarioComSucesso()
-        {
-            // Arrange
-            var userId = Guid.NewGuid();
-
-            var response = new ApiResponse
+            var usuarioUpdate = new Usuario
             {
-                Ok = true,
+                IdUsuario = Guid.NewGuid(),
+                Nome = "Nome",
+                Email = "email@testeinexistente.com",
+                Senha = "Senha123@",
+                Tipo = TipoUsuario.Usuario
             };
 
-            var mockService = new Mock<IUseCaseUsuario>();
-            mockService.Setup(s => s.Delete(userId)).ReturnsAsync(response);
-            var controller = new UsuariosController(mockService.Object);
+            var mockLog = new Mock<ILogger<UsuarioUseCase>>();
+            var mockRepository = new Mock<IUsuarioRepository>();
+            mockRepository.Setup(r => r.UpdateAsync(usuarioUpdate)).ReturnsAsync(null);
+
+            var useCase = new UsuarioUseCase(mockRepository.Object, mockLog.Object);
 
             // Act
-            var result = await controller.Delete(userId);
+            var result = await useCase.Update(usuarioInvalido);
 
             // Assert
-            var statusCode = Assert.IsType<OkObjectResult>(result.Result);
-            var responseResult = Assert.IsType<ApiResponse>(statusCode.Value);
+            Assert.True(result.Ok);
+            Assert.Contains("Nenhuma alteração foi realizada.", Convert.ToString(result.Data));
+        }
 
-            Assert.True(responseResult.Ok);
+        [Fact(DisplayName = "Dado que o usuário não existe na base, quando tentar deletar, então deve retornar mensagem de nenhuma alteração realizada")]
+        public async Task DeletarUsuarioInexistenteNaBaseDeDados()
+        {
+            // Arrange
+            var guiId = Guid.NewGuid();
+
+            var mockLog = new Mock<ILogger<UsuarioUseCase>>();
+            var mockRepository = new Mock<IUsuarioRepository>();
+            mockRepository.Setup(r => r.DeleteAsync(guiId)).ReturnsAsync(null);
+
+            var useCase = new UsuarioUseCase(mockRepository.Object, mockLog.Object);
+
+            // Act
+            var result = await useCase.Delete(guiId);
+
+            // Assert
+            Assert.True(result.Ok);
+            Assert.Contains("Nenhuma alteração foi realizada.", Convert.ToString(result.Data));
         }
     }
 }

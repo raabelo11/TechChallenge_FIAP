@@ -3,7 +3,6 @@
     public enum TipoUsuario
     {
         Usuario = 1,
-        Administrador = 2,
-        Master = 3
+        Administrador = 2
     }
 }
