@@ -6,6 +6,7 @@ using FCG.Domain.DTOs;
 using FCG.Domain.Interface;
 using FCG.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace FGC.Tests
@@ -76,8 +77,9 @@ namespace FGC.Tests
             //Arrange
             var guid = Guid.NewGuid();
             var mockRepository = new Mock<IJogoRepository>();
+            var mockLogg = new Mock<ILogger<JogoUseCase>>();
             mockRepository.Setup(mockRepository => mockRepository.DeleteAsync(guid)).ReturnsAsync((false));
-            var usecase = new JogoUseCase(mockRepository.Object);
+            var usecase = new JogoUseCase(mockRepository.Object, mockLogg.Object);
             //Act
             var result = await usecase.DeletarJogo(guid);
             //Assert
@@ -101,12 +103,13 @@ namespace FGC.Tests
             };
 
             var mockRepository = new Mock<IJogoRepository>();
+            var mockLogg = new Mock<ILogger<JogoUseCase>>();    
 
             // Mocka o retorno do banco de dados
             mockRepository.Setup(r => r.GetByIdAsync(jogoId)).ReturnsAsync(jogo);
             mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Jogos>())).ReturnsAsync(true);
 
-            var useCase = new JogoUseCase(mockRepository.Object);
+            var useCase = new JogoUseCase(mockRepository.Object, mockLogg.Object);
 
             // Act
             var result = await useCase.AtualizarJogo(jogoId, desconto);
