@@ -70,24 +70,19 @@ namespace FGC.Tests
             Assert.True(apiResponse.Ok);
             Assert.Equal(jogos, apiResponse.Data);
         }
-        [Fact(DisplayName = "Ao chamar o endpoint de deletar jogo, devemos remover o jogo com sucesso passando o id do jogo")]
-        public async Task DeletarJogo_Valido()
+        [Fact(DisplayName = "Validar que não pode deletar um id inexistente")]
+        public async Task DeletarJogo_Invalido()
         {
-            // Arrange
-            var jogoId = Guid.NewGuid();
-            var response = new ApiResponse
-            {
-                Ok = true,
-            };
-            var mockService = new Mock<IUseCaseJogo>();
-            mockService.Setup(s => s.DeletarJogo(jogoId)).ReturnsAsync(response);
-            var controller = new JogosController(mockService.Object);
-            // Act
-            var result = await controller.Delete(jogoId);
-            // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var apiResponse = Assert.IsType<ApiResponse>(okResult.Value);
-            Assert.True(apiResponse.Ok);
+            //Arrange
+            var guid = Guid.NewGuid();
+            var mockRepository = new Mock<IJogoRepository>();
+            mockRepository.Setup(mockRepository => mockRepository.DeleteAsync(guid)).ReturnsAsync((false));
+            var usecase = new JogoUseCase(mockRepository.Object);
+            //Act
+            var result = await usecase.DeletarJogo(guid);
+            //Assert
+            Assert.False(result.Ok);
+
         }
         [Fact(DisplayName = "Ao chamar o endpoint de atualizar jogo, devemos aplicar um desconto no jogo com sucesso passando o id do jogo e o valor do desconto")]
         public async Task AtualizarJogo_Valido()
@@ -114,11 +109,9 @@ namespace FGC.Tests
             var useCase = new JogoUseCase(mockRepository.Object);
 
             // Act
-            // Valida a logica, como se tivesse o retorno do banco de dados
             var result = await useCase.AtualizarJogo(jogoId, desconto);
 
             // Assert
-            // Valida o que vc quiser
             Assert.False(result.Ok);
             Assert.Contains("Não foi possível atualizar esse jogo", result.Errors);
         }

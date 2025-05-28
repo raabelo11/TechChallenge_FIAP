@@ -13,12 +13,12 @@ namespace FCG.Controllers
     {
         private readonly IUseCaseJogo _jogoUseCase = useCaseJogo;
 
-        [AllowAnonymous]
+
         /// <summary>
-        /// Descrição do seu end point.
+        /// End point para listar todos os jogos cadastrados.
         /// </summary>
-        /// <remarks>Destalhes sobre seu end point</remarks>
-        /// <response code="200">explique seu retorno em caso de sucesso</response>
+        /// <response code="200">Deve retornar lista de jogos.</response>
+        [AllowAnonymous]
         [HttpGet("ListarJogos")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
@@ -27,6 +27,12 @@ namespace FCG.Controllers
             var response = await _jogoUseCase.ListarJogos();
             return response.Ok ? Ok(response) : BadRequest(response);
         }
+        /// <summary>
+        /// End point para cadastrar o jogo
+        /// </summary>
+        /// <response code="200">Deve deixar cadastrar apenas os usuários com permissão de Administrador.</response>
+        /// <response code="401">Não tem permissão.</response>
+        /// 
         [Authorize(Policy = "AdminPolicy")]
         [HttpPost("CriarJogo")]
         [Produces(typeof(ApiResponse))]
@@ -36,6 +42,12 @@ namespace FCG.Controllers
             var response = await _jogoUseCase.Criar(jogo);
             return response.Ok ? Ok(response) : BadRequest(response);
         }
+        /// <summary>
+        /// End point para inserir desconto no jogo.
+        /// </summary>
+        /// <response code="200">Deve deixar cadastrar desconto os usuários com permissão de Administrador.</response>
+        /// <response code="401">Não tem permissão.</response>
+        /// 
         [Authorize(Policy = "AdminPolicy")]
         [HttpPut("InserirDesconto/{id}")]
         [Produces(typeof(ApiResponse))]
@@ -46,6 +58,12 @@ namespace FCG.Controllers
             var response = await _jogoUseCase.AtualizarJogo(id, desconto);
             return response.Ok ? Ok(response) : BadRequest(response);
         }
+        /// <summary>
+        /// End point para deletar o jogo.
+        /// </summary>
+        /// <response code="200">Deve deixar apenas usuários com permissão de Administrador.</response>
+        /// <response code="401">Não tem permissão.</response>
+        /// 
         [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("DeletarJogo/{id}")]
         [Produces(typeof(ApiResponse))]
