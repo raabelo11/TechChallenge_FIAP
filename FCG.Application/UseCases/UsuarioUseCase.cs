@@ -2,17 +2,21 @@
 using FCG.Domain.DTOs;
 using FCG.Domain.Interface;
 using FCG.Domain.Models;
+using Microsoft.Extensions.Logging;
 
 namespace FCG.Application.UseCases
 {
-    public class UsuarioUseCase(IUsuarioRepository usuarioRepository) : IUseCaseUsuario
+    public class UsuarioUseCase(IUsuarioRepository usuarioRepository, ILogger<UsuarioUseCase> logger) : IUseCaseUsuario
     {
         private readonly IUsuarioRepository _usuarioRepository = usuarioRepository;
+        private readonly ILogger<UsuarioUseCase> _logger = logger;
 
         public async Task<ApiResponse> Add(UsuarioDTO usuarioDTO)
         {
             try
             {
+                _logger.LogInformation($" ======> Usuário a ser enviado para inclusão: Nome: {usuarioDTO.Nome}, Email: {usuarioDTO.Email}, Tipo: {usuarioDTO.Tipo} <======");
+
                 var checkEmail = await _usuarioRepository.GetByEmail(usuarioDTO.Email);
 
                 if (checkEmail != null)
@@ -40,6 +44,7 @@ namespace FCG.Application.UseCases
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Exception: {ex.Message}, {ex.StackTrace}");
                 return new ApiResponse
                 {
                     Ok = false,
@@ -60,6 +65,7 @@ namespace FCG.Application.UseCases
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Exception: {ex.Message}, {ex.StackTrace}");
                 return new ApiResponse
                 {
                     Ok = false,
@@ -80,6 +86,7 @@ namespace FCG.Application.UseCases
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Exception: {ex.Message}, {ex.StackTrace}");
                 return new ApiResponse
                 {
                     Ok = false,
@@ -92,21 +99,9 @@ namespace FCG.Application.UseCases
         {
             try
             {
+                _logger.LogInformation($" ======> Usuário a ser atualizado: Guid: {usuarioUpdateDTO.Id}, Nome: {usuarioUpdateDTO.Nome}, Email: {usuarioUpdateDTO.Email} <======");
+
                 var usuario = await _usuarioRepository.GetByIdAsync(usuarioUpdateDTO.Id);
-
-                if (usuario.Email != usuarioUpdateDTO.Email)
-                {
-                    var checkEmail = await _usuarioRepository.GetByEmail(usuarioUpdateDTO.Email);
-
-                    if (checkEmail != null)
-                    {
-                        return new ApiResponse
-                        {
-                            Ok = true,
-                            Data = "E-mail já existente."
-                        };
-                    }
-                }
 
                 if (usuario != null)
                 {
@@ -126,6 +121,20 @@ namespace FCG.Application.UseCases
                     };
                 }
 
+                if (usuario.Email != usuarioUpdateDTO.Email)
+                {
+                    var checkEmail = await _usuarioRepository.GetByEmail(usuarioUpdateDTO.Email);
+
+                    if (checkEmail != null)
+                    {
+                        return new ApiResponse
+                        {
+                            Ok = true,
+                            Data = "E-mail já existente."
+                        };
+                    }
+                }
+
                 return new ApiResponse
                 {
                     Ok = true
@@ -133,6 +142,7 @@ namespace FCG.Application.UseCases
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Exception: {ex.Message}, {ex.StackTrace}");
                 return new ApiResponse
                 {
                     Ok = false,
@@ -145,6 +155,8 @@ namespace FCG.Application.UseCases
         {
             try
             {
+                _logger.LogInformation($"Usuario a ser excluido: ID: {id}");
+
                 if (await _usuarioRepository.GetByIdAsync(id) != null)
                 {
                     bool sucesso = await _usuarioRepository.DeleteAsync(id);
@@ -165,6 +177,7 @@ namespace FCG.Application.UseCases
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Exception: {ex.Message}, {ex.StackTrace}");
                 return new ApiResponse
                 {
                     Ok = false,

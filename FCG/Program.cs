@@ -9,7 +9,6 @@ using FCG.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -100,6 +99,8 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 builder.Logging.AddProvider(new CustomerLoggerProvider(new CustomLoggerProviderConfiguration { LogLevel = LogLevel.Information }));
 var app = builder.Build();
 
