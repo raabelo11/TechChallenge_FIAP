@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class JogosController(IUseCaseJogo useCaseJogo) : Controller
@@ -32,7 +33,8 @@ namespace FCG.Controllers
         [ProducesDefaultResponseType(typeof(ApiResponse))]
         public async Task<ActionResult<ApiResponse>> ListarCategoriasJogos()
         {
-
+            var response = await _jogoUseCase.ListarCategorias();
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
         /// <summary>
         /// End point para cadastrar o jogo

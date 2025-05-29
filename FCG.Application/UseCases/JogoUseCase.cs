@@ -124,5 +124,27 @@ namespace FCG.Application.UseCases
             }
         }
 
+        public async Task<ApiResponse> ListarCategorias()
+        {
+            _logger.LogInformation("Listando todas as categorias de jogos.");
+            try
+            {
+                var jogos = await _jogoRepository.GetAllAsync();
+                var categorias = jogos.Select(j => j.Categoria.ToString()).Distinct().ToList();
+                return new ApiResponse
+                {
+                    Ok = true,
+                    Data = categorias
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro ao listar categorias: {ex.Message}, {ex.StackTrace}");
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+        }
     }
 }

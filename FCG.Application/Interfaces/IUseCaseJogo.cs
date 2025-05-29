@@ -9,5 +9,6 @@ namespace FCG.Application.Interfaces
         public Task<ApiResponse> Criar(JogoDTO jogos);
         public Task<ApiResponse> DeletarJogo(Guid guid);
         public Task<ApiResponse> AtualizarJogo(Guid guid,int desconto);
+        public Task<ApiResponse> ListarCategorias();
     }
 }
