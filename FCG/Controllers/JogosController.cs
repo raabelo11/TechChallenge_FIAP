@@ -27,6 +27,13 @@ namespace FCG.Controllers
             var response = await _jogoUseCase.ListarJogos();
             return response.Ok ? Ok(response) : BadRequest(response);
         }
+        [HttpGet("CategoriasJogos")]
+        [Produces(typeof(ApiResponse))]
+        [ProducesDefaultResponseType(typeof(ApiResponse))]
+        public async Task<ActionResult<ApiResponse>> ListarCategoriasJogos()
+        {
+
+        }
         /// <summary>
         /// End point para cadastrar o jogo
         /// </summary>
