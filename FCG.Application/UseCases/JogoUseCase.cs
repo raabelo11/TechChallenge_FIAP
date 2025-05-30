@@ -1,5 +1,6 @@
 ﻿using FCG.Application.Interfaces;
 using FCG.Domain.DTOs;
+using FCG.Domain.Enums;
 using FCG.Domain.Interface;
 using FCG.Domain.Models;
 using Microsoft.Extensions.Logging;
@@ -54,6 +55,15 @@ namespace FCG.Application.UseCases
         {
             try
             {
+                if(Enum.IsDefined(typeof(Generos), jogos.Categoria) == false)
+                {
+                    _logger.LogWarning($"Categoria inválida: {jogos.Categoria}");
+                    return new ApiResponse
+                    {
+                        Errors = ["Categoria inválida"],
+                        Ok = false
+                    };
+                }
                 _logger.LogInformation($"Criando jogo: Nome: {jogos.Nome}, Descrição: {jogos.Descricao}, Preço: {jogos.Preco}");
                 Jogos jogo = new Jogos()
                 {
@@ -108,10 +118,18 @@ namespace FCG.Application.UseCases
             try
             {
                 _logger.LogInformation("Listando todos os jogos cadastrados.");
+                var listaDeJogos = await _jogoRepository.GetAllAsync();
+                var jogos = listaDeJogos.Select(x => new
+                {
+                    nome = x.Nome,
+                    descricao = x.Descricao,
+                    preco = x.Preco,
+                    categoria = x.Categoria.ToString()
+                });
                 return new ApiResponse
                 {
                     Ok = true,
-                    Data = await _jogoRepository.GetAllAsync()
+                    Data = jogos
                 };
             }
             catch (Exception ex)
@@ -124,5 +142,66 @@ namespace FCG.Application.UseCases
             }
         }
 
+        public async Task<ApiResponse> ListarCategorias()
+        {
+            _logger.LogInformation("Listando todas as categorias de jogos.");
+            try
+            {
+                var jogos = Enum.GetValues(typeof(Generos));
+                List<string> categorias = new List<string>();
+                foreach (var gamesEnum in jogos)
+                    categorias.Add(gamesEnum.ToString());
+                return new ApiResponse
+                {
+                    Ok = true,
+                    Data = categorias
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro ao listar categorias: {ex.Message}, {ex.StackTrace}");
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+        }
+
+        public async Task<ApiResponse> listarJogosPorCategoria(int id)
+        {
+            try
+            {   
+                if(Enum.IsDefined(typeof(Generos), id) == false)
+                {
+                    _logger.LogWarning($"Nenhum jogo encontrado para a categoria: {id}");
+                    return new ApiResponse
+                    {
+                        Ok = false,
+                        Errors = ["Nenhum jogo encontrado para essa categoria"]
+                    };
+                }
+                _logger.LogInformation($"[Listando pela seguinte categoria: {id}]");
+                var jogos = _jogoRepository.GetAllAsync().Result.Where(x => (int)x.Categoria == id);
+                return new ApiResponse
+                {
+                    Ok = true,
+                    Data = jogos.Select(x => new
+                    {
+                        nome = x.Nome,
+                        descricao = x.Descricao,
+                        preco = x.Preco,
+                        categoria = x.Categoria.ToString()
+                    })
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro ao listar categorias: {ex.Message}, {ex.StackTrace}");
+                return new ApiResponse
+                {
+                    Errors = [$"{ex.Message}, {ex.StackTrace}"]
+                };
+            }
+        }
     }
 }
