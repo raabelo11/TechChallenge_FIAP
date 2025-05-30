@@ -5,6 +5,8 @@ using FCG.Controllers;
 using FCG.Domain.DTOs;
 using FCG.Domain.Interface;
 using FCG.Domain.Models;
+using FCG.Infrastructure.Repository;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -117,6 +119,24 @@ namespace FGC.Tests
             // Assert
             Assert.False(result.Ok);
             Assert.Contains("Não foi possível atualizar esse jogo", result.Errors);
+        }
+
+        [Fact(DisplayName = "Inserir id inexistente")]
+        public async Task listarJogosPorCategorias()
+        {
+            var idCategoria = 1111;
+
+            var mockLog = new Mock<ILogger<JogoUseCase>>();
+            var mockRepository = new Mock<IJogoRepository>();
+            mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<Jogos>());
+            var mockJogo = new JogoUseCase(mockRepository.Object, mockLog.Object);
+
+            // Act
+            var result = await mockJogo.listarJogosPorCategoria(idCategoria);
+
+            // Assert
+            Assert.Contains("Nenhum jogo encontrado para essa categoria", result.Errors);
+
         }
     }
 }

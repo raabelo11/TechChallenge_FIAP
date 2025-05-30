@@ -10,5 +10,6 @@ namespace FCG.Application.Interfaces
         public Task<ApiResponse> DeletarJogo(Guid guid);
         public Task<ApiResponse> AtualizarJogo(Guid guid,int desconto);
         public Task<ApiResponse> ListarCategorias();
+        public Task<ApiResponse> listarJogosPorCategoria(int id);
     }
 }
