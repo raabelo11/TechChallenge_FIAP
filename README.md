@@ -21,9 +21,10 @@ O projeto está organizado nos seguintes diretórios:
 
 - **.NET**
 - **C#**
-- **xUnit / NUnit / MSTest** (ajustar conforme utilizado)
-- **Entity Framework Core** (se aplicável)
-- **Swagger** (se aplicável)
+- **xUnit / Moq**
+- **Entity Framework Core**
+- **Swagger**
+- **Autenticação JWT**
 
 ## 🚀 Como Executar o Projeto
 
@@ -37,19 +38,28 @@ git clone https://github.com/raabelo11/TechChallenge_FIAP.git
 ```bash
 cd TechChallenge_FIAP
 ````
-### 3. Abra o projeto em sua IDE preferida (Visual Studio, VS Code, etc.)
-### 4. Restaure os pacotes:
+### 3. Configure a string de conexão localizada no appsettings.json
+Rode os migrations no seu banco de dados SQL Server via linha de comando no visual studio:
+````bash
+dotnet ef database update
+````
+### 4. Abra o projeto em sua IDE preferida (Visual Studio, VS Code, etc.)
+### 5. Restaure os pacotes:
 ````bash
 dotnet restore
 ````
-### 5. Compile o projeto:
+### 6. Compile o projeto:
 ````bash
 dotnet build
 ````
-### 6. Execute o projeto:
+### 7. Execute o projeto:
 ````bash
 dotnet run --project FCG
 ````
+### 8. Crie um usuário válido via endpoint: **api/Usuarios/CriarUsuario**
+### 9. Faça login com o usuário criado em: **api/Authorization/login**
+### 10. Após login feito, copie o token enviado no data e autentique via authorize no swagger, seguindo o padrão:
+**Bearer {Token gerado}**
 
 ✅ Como Executar os Testes
 ### 1. Navegue até o diretório de testes:
