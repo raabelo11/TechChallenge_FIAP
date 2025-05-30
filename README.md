@@ -39,7 +39,8 @@ git clone https://github.com/raabelo11/TechChallenge_FIAP.git
 cd TechChallenge_FIAP
 ````
 ### 3. Configure a string de conexão localizada no appsettings.json
-Rode os migrations no seu banco de dados SQL Server via linha de comando no visual studio:
+- No appsettings, configure um diretório válido para salvar os logs gerados no campo - "Directory": {"path":}
+- Rode os migrations no seu banco de dados SQL Server via linha de comando no visual studio:
 ````bash
 dotnet ef database update
 ````
