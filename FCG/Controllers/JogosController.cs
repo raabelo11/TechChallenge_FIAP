@@ -68,7 +68,7 @@ namespace FCG.Controllers
         [HttpPost("CriarJogo")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
-        public async Task<ActionResult<ApiResponse>> Create(JogoDTO jogo)
+        public async Task<ActionResult<ApiResponse>> Create([FromBody]JogoDTO jogo)
         {
             var response = await _jogoUseCase.Criar(jogo);
             return response.Ok ? Ok(response) : BadRequest(response);
@@ -83,7 +83,7 @@ namespace FCG.Controllers
         [HttpPut("InserirDesconto/{id}")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
-        public async Task<ActionResult<ApiResponse>> Update(int desconto, Guid id)
+        public async Task<ActionResult<ApiResponse>> Update([FromBody] int desconto,Guid id)
         {
 
             var response = await _jogoUseCase.AtualizarJogo(id, desconto);
@@ -99,7 +99,7 @@ namespace FCG.Controllers
         [HttpDelete("DeletarJogo/{id}")]
         [Produces(typeof(ApiResponse))]
         [ProducesDefaultResponseType(typeof(ApiResponse))]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete([FromBody] Guid id)
         {
             var response = await _jogoUseCase.DeletarJogo(id);
             return response.Ok ? Ok(response) : BadRequest(response);

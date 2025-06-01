@@ -5,8 +5,6 @@ using FCG.Controllers;
 using FCG.Domain.DTOs;
 using FCG.Domain.Interface;
 using FCG.Domain.Models;
-using FCG.Infrastructure.Repository;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -88,7 +86,7 @@ namespace FGC.Tests
             Assert.False(result.Ok);
 
         }
-        [Fact(DisplayName = "Ao chamar o endpoint de atualizar jogo, devemos aplicar um desconto no jogo com sucesso passando o id do jogo e o valor do desconto")]
+        [Fact(DisplayName = "Ao chamar o endpoint de atualizar jogo, devemos aplicar um desconto válido no jogo")]
         public async Task AtualizarJogo_Valido()
         {
             // Arrange
