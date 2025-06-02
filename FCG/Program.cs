@@ -33,7 +33,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new() { Title = "Sua API", Version = "v1" });
+    options.SwaggerDoc("v1", new() { Title = "FCG - Fiap Cloud Games", Version = "v1" });
 
     var filePath = Path.Combine(System.AppContext.BaseDirectory, "FCG.xml");
     options.IncludeXmlComments(filePath);
