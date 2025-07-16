@@ -7,6 +7,8 @@
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	  <!--<NoWarn>$(NoWarn);1591</NoWarn>-->
 	  <NoWarn>$(NoWarn);1587</NoWarn>
+	  <UserSecretsId>d870b088-1015-45b9-8c27-af65ea4ddceb</UserSecretsId>
+	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +19,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
