@@ -1,4 +1,5 @@
 ﻿using FCG.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace FCG.Domain.Models
