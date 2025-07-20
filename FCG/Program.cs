@@ -15,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//Libera qualquer ip com a porta 8080 para AWS
+builder.WebHost.UseUrls("http://0.0.0.0:8080");
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -108,7 +111,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.ConfigureExceptionHandler();
 app.UseLogging();
-app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
