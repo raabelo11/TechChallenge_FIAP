@@ -1,1 +1,14 @@
-teste
+name: Testando Action
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Hello Teste workflow
+        run: echo "Workflow rodando na branch master com sucesso!"
