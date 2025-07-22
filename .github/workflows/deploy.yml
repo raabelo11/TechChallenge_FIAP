@@ -21,8 +21,11 @@ jobs:
       - name: Restore dependencies
         run: dotnet Restore
         
-      - name: Run Tests
-        run: dotnet test FCG.Tests/FCG.Tests.csproj --no-build --verbosity normal
+      - name: Build solution
+        run: dotnet build --configuration Debug
+
+      - name: Run tests
+        run: dotnet test FGC.Tests/FGC.Tests.csproj --no-restore --verbosity normal
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
