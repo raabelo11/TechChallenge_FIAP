@@ -11,7 +11,7 @@ namespace FCG.Domain.DTOs
 
         [Required]
         [EmailAddress]
-        [RegularExpression(@"^[\w\.-]+@[\w\.-]+\.\w{2,}$", ErrorMessage = "E-mail inválido")]
+        [RegularExpression(@"^[\w\.-]+@[\w\.-]+\.\w{2,}$", ErrorMessage = "Email invalido.")]
         public required string Email { get; set; }
 
         [Required]
