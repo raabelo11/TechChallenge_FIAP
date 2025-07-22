@@ -46,7 +46,7 @@ namespace FGC.Tests
             var result = await useCase.Add(usuarioDTO);
 
             // Assert
-            Assert.Contains("E-mail já existente.", Convert.ToString(result.Data));
+            Assert.Contains("Email ja existente.", Convert.ToString(result.Data));
             Assert.True(result.Ok);
         }
 
@@ -164,7 +164,7 @@ namespace FGC.Tests
 
             // Assert
             Assert.True(result.Ok);
-            Assert.Contains("Nenhuma alteração foi realizada.", Convert.ToString(result.Data));
+            Assert.Contains("Nenhuma alteracao foi realizada.", Convert.ToString(result.Data));
         }
 
         [Fact(DisplayName = "Dado que o usuário não existe na base, quando tentar deletar, então deve retornar mensagem de nenhuma alteração realizada")]
@@ -184,7 +184,7 @@ namespace FGC.Tests
 
             // Assert
             Assert.True(result.Ok);
-            Assert.Contains("Nenhuma alteração foi realizada.", Convert.ToString(result.Data));
+            Assert.Contains("Nenhuma alteracao foi realizada.", Convert.ToString(result.Data));
         }
     }
 }

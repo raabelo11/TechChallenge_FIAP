@@ -130,7 +130,7 @@ namespace FCG.Application.UseCases
                         return new ApiResponse
                         {
                             Ok = true,
-                            Data = "Email ja existente"
+                            Data = "Email ja existente."
                         };
                     }
                 }
