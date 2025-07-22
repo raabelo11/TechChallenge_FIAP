@@ -108,7 +108,7 @@ namespace FGC.Tests
 
             // Assert
             Assert.False(isValid);
-            Assert.Contains(validationResults, v => v.ErrorMessage!.Contains("E-mail inválido"));
+            Assert.Contains(validationResults, v => v.ErrorMessage!.Contains("Email invalido"));
         }
 
         [Fact(DisplayName = "Dado que não há usuários cadastrados, quando listar usuários, então deve retornar uma lista vazia sem erros")]
