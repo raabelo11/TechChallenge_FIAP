@@ -29,7 +29,7 @@ namespace FCG.Controllers
         public async Task<ActionResult<ApiResponse>> Add([FromBody] UsuarioDTO usuarioDTO)
         {
             var response = await _usuarioUseCase.Add(usuarioDTO);
-           return response.Ok ? Ok(response) : BadRequest(response);
+            return response.Ok ? Ok(response) : BadRequest(response);
         }
 
         /// <summary>
@@ -89,6 +89,13 @@ namespace FCG.Controllers
         {
             var response = await _usuarioUseCase.Delete(id);
             return response.Ok ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpGet]
+        [Route("TESTE CI/CD")]
+        public ActionResult<string> TesteCICD()
+        {
+            return Ok("Teste CI/CD realizado com sucesso!");
         }
     }
 }
