@@ -24,7 +24,7 @@ namespace FCG.Application.UseCases
                     return new ApiResponse
                     {
                         Ok = true,
-                        Data = "E-mail já existente."
+                        Data = "Email ja existente."
                     };
                 }
 
@@ -117,7 +117,7 @@ namespace FCG.Application.UseCases
                     return new ApiResponse
                     {
                         Ok = true,
-                        Data = "Nenhuma alteração foi realizada."
+                        Data = "Nenhuma alteracao foi realizada."
                     };
                 }
 
@@ -130,7 +130,7 @@ namespace FCG.Application.UseCases
                         return new ApiResponse
                         {
                             Ok = true,
-                            Data = "E-mail já existente."
+                            Data = "Email ja existente"
                         };
                     }
                 }
@@ -166,7 +166,7 @@ namespace FCG.Application.UseCases
                     return new ApiResponse
                     {
                         Ok = true,
-                        Data = "Nenhuma alteração foi realizada."
+                        Data = "Nenhuma alteracao foi realizada."
                     };
                 }
 
