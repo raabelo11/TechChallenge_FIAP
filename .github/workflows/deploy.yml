@@ -1,4 +1,4 @@
-name: Build and Deploy to EC2
+name: CI/CD - Build, Teste e Deploy na EC2
 
 on:
   push:
@@ -6,14 +6,15 @@ on:
       - master
 
 jobs:
-  build-and-push:
+  build-tests-and-push:
+    name: CI - Build e Teste
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Rodar Testes
+      - name: Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0'
@@ -40,11 +41,11 @@ jobs:
         run: docker push z4lit0/fiapcloudgamingdockrepo:latest
         
   deploy-to-ec2:
-    needs: build-and-push
+    needs: build-tests-and-push
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to EC2 via SSH
+      - name: Deploy na EC2 via SSH
         uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.EC2_HOST }}
