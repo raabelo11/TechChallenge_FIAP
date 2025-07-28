@@ -42,6 +42,7 @@ jobs:
         
   deploy-to-ec2:
     needs: build-tests-and-push
+    name: CD - Deploy na EC2
     runs-on: ubuntu-latest
 
     steps:
