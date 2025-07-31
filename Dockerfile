@@ -1,24 +1,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
-RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
-&& echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
-&& wget https://download.newrelic.com/548C16BF.gpg \
-&& apt-key add 548C16BF.gpg \
-&& apt-get update \
-&& apt-get install -y 'newrelic-dotnet-agent' \
-&& rm -rf /var/lib/apt/lists/*
-
-ENV CORECLR_ENABLE_PROFILING=1 \
-CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
-CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent \
-CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so \
-NEW_RELIC_LICENSE_KEY=69b9d006bc69061aa47b8b8177917ef5FFFFNRAL \
-NEW_RELIC_APP_NAME="fiap"
-USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
-
 
 # Esta fase é usada para compilar o projeto de serviço
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -42,5 +26,23 @@ COPY --from=publish /app/publish .
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./FCG.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Install the agent
+RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
+&& echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
+&& wget https://download.newrelic.com/548C16BF.gpg \
+&& apt-key add 548C16BF.gpg \
+&& apt-get update \
+&& apt-get install -y 'newrelic-dotnet-agent' \
+&& rm -rf /var/lib/apt/lists/*
+
+# Enable the agent
+ENV CORECLR_ENABLE_PROFILING=1 \
+CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
+CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent \
+CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so \
+NEW_RELIC_LICENSE_KEY=38f177c34782443ac0bf297ea1a97840FFFFNRAL \
+NEW_RELIC_APP_NAME="FCG.Api"
+USER $APP_UID
 
 ENTRYPOINT ["dotnet", "FCG.dll"]
