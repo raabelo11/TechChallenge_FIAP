@@ -9,11 +9,14 @@ using FCG.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using NewRelic.Api.Agent;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+NewRelic.Api.Agent.NewRelic.SetApplicationName("FCG.Api");
 
 //Libera qualquer ip com a porta 8080 para AWS
 builder.WebHost.UseUrls("http://0.0.0.0:8080");
