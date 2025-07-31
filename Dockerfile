@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
+USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
@@ -17,15 +18,14 @@ COPY . .
 WORKDIR "/src/FCG"
 RUN dotnet build "./FCG.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./FCG.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
+FROM base AS final
+WORKDIR /app
 
 # Install the agent
 RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
@@ -41,8 +41,8 @@ ENV CORECLR_ENABLE_PROFILING=1 \
 CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
 CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent \
 CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so \
-NEW_RELIC_LICENSE_KEY=38f177c34782443ac0bf297ea1a97840FFFFNRAL \
-NEW_RELIC_APP_NAME="FCG.Api"
-USER $APP_UID
+NEW_RELIC_LICENSE_KEY=89145abd01b095d9c9e4559da5e8f993FFFFNRAL \
+NEW_RELIC_APP_NAME="api.fcg"
 
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "FCG.dll"]
