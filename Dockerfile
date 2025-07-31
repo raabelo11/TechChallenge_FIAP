@@ -4,7 +4,7 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-# Fase de build (mantida igual - usa SDK)
+# Fase de build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
@@ -22,19 +22,22 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./FCG.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Fase final (Amazon Linux)
+# Fase final (Debian-based)
 FROM base AS final
 WORKDIR /app
 
-# Instalação para Amazon Linux (yum/dnf)
-RUN yum install -y tar gzip wget && \
-    wget https://download.newrelic.com/dot_net_agent/latest_release/newrelic-dotnet-agent_linux_x64.tar.gz && \
+# Instalação universal do New Relic (sem yum/apt)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends wget tar && \
+    wget https://download.newrelic.com/dot_net_agent/latest_release/newrelic-dotnet-agent_linux_x64.tar.gz -O /tmp/newrelic.tar.gz && \
     mkdir -p /usr/local/newrelic-dotnet-agent && \
-    tar -xzf newrelic-dotnet-agent_linux_x64.tar.gz -C /usr/local/newrelic-dotnet-agent && \
-    rm newrelic-dotnet-agent_linux_x64.tar.gz && \
-    yum clean all
+    tar -xzf /tmp/newrelic.tar.gz -C /usr/local/newrelic-dotnet-agent && \
+    rm /tmp/newrelic.tar.gz && \
+    apt-get remove -y wget && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
-# Variáveis de ambiente (obrigatórias)
+# Variáveis de ambiente
 ENV CORECLR_ENABLE_PROFILING=1 \
     CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
     CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent \
