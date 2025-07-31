@@ -3,15 +3,11 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
 # Instala o agente New Relic (mais robusto e com validações)
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget tar ca-certificates && \
-    wget -q https://download.newrelic.com/dot_net_agent/latest_release/newrelic-dotnet-agent_linux_x64.tar.gz -O /tmp/newrelic.tar.gz && \
-    if [ ! -s /tmp/newrelic.tar.gz ]; then echo "ERRO: Falha no download do New Relic agent."; cat /tmp/newrelic.tar.gz; exit 1; fi && \
-    mkdir -p /usr/local/newrelic-dotnet-agent && \
-    tar -xzf /tmp/newrelic.tar.gz -C /usr/local/newrelic-dotnet-agent && \
-    rm /tmp/newrelic.tar.gz && \
-    apt-get remove -y wget && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends wget ca-certificates gnupg && \
+    wget -O newrelic-install.sh https://download.newrelic.com/install/newrelic-cli/scripts/install.sh && \
+    chmod +x newrelic-install.sh && \
+    ./newrelic-install.sh install -n dotnet-agent && \
+    rm -rf /var/lib/apt/lists/* newrelic-install.sh
 
 # Variáveis de ambiente do New Relic com a chave fixada
 ENV CORECLR_ENABLE_PROFILING=1 \
