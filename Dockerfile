@@ -41,6 +41,7 @@ CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so \
 NEW_RELIC_LICENSE_KEY=3946d9e9645913c6d0268ca3ac8fe914FFFFNRAL \
 NEW_RELIC_APP_NAME="FCG"
 
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "FCG.dll"]
