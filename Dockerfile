@@ -1,11 +1,11 @@
 # Imagem base com ASP.NET
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
-# Instala o agente New Relic
+# Instala o agente New Relic (mais robusto e com validações)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends wget tar ca-certificates && \
     wget -q https://download.newrelic.com/dot_net_agent/latest_release/newrelic-dotnet-agent_linux_x64.tar.gz -O /tmp/newrelic.tar.gz && \
-    test -s /tmp/newrelic.tar.gz && \
+    if [ ! -s /tmp/newrelic.tar.gz ]; then echo "ERRO: Falha no download do New Relic agent."; cat /tmp/newrelic.tar.gz; exit 1; fi && \
     mkdir -p /usr/local/newrelic-dotnet-agent && \
     tar -xzf /tmp/newrelic.tar.gz -C /usr/local/newrelic-dotnet-agent && \
     rm /tmp/newrelic.tar.gz && \
