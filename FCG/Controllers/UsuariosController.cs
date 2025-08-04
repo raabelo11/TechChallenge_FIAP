@@ -90,12 +90,5 @@ namespace FCG.Controllers
             var response = await _usuarioUseCase.Delete(id);
             return response.Ok ? Ok(response) : BadRequest(response);
         }
-
-        [HttpGet]
-        [Route("TESTE CI/CD")]
-        public ActionResult<string> TesteCICD()
-        {
-            return Ok("Teste CI/CD realizado com sucesso!");
-        }
     }
 }
