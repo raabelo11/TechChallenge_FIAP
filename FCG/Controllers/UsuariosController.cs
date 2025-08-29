@@ -91,6 +91,8 @@ namespace FCG.Controllers
             return response.Ok ? Ok(response) : BadRequest(response);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
         [Route("Teste")]
         public ActionResult Teste(Guid id)
         {
