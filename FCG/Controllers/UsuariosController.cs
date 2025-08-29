@@ -90,5 +90,11 @@ namespace FCG.Controllers
             var response = await _usuarioUseCase.Delete(id);
             return response.Ok ? Ok(response) : BadRequest(response);
         }
+
+        [Route("Teste")]
+        public ActionResult Teste(Guid id)
+        {
+            return Ok("Acesso Liberado!");
+        }
     }
 }
