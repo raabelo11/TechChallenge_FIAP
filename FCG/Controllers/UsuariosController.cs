@@ -91,10 +91,14 @@ namespace FCG.Controllers
             return response.Ok ? Ok(response) : BadRequest(response);
         }
 
+        /// <summary>
+        ///     TESTE
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [AllowAnonymous]
-        [HttpGet]
-        [Route("Teste")]
-        public ActionResult Teste(Guid id)
+        [HttpGet("Teste")]
+        public ActionResult Teste()
         {
             return Ok("Acesso Liberado!");
         }
